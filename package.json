@@ -15,7 +15,7 @@
     "appId": "com.rooms.gamingcafe",
     "productName": "Rooms Gaming Cafe",
     "directories": {
-      "output": "dist"
+      "output": "dist": "electron-builder --win --publish=never"
     },
     "files": [
       "main.js",
