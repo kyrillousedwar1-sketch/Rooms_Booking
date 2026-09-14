@@ -1,0 +1,32 @@
+{
+  "name": "rooms-gaming-cafe",
+  "version": "1.0.0",
+  "description": "Rooms - Gaming Cafe & More | Booking App",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win"
+  },
+  "devDependencies": {
+    "electron": "^31.0.0",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.rooms.gamingcafe",
+    "productName": "Rooms Gaming Cafe",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "app/**/*"
+    ],
+    "win": {
+      "target": ["nsis", "portable"]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}
