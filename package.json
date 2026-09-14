@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "dist": "electron-builder --win"
+    "dist": "electron-builder --win --publish=never"
   },
   "devDependencies": {
     "electron": "^31.0.0",
@@ -15,7 +15,7 @@
     "appId": "com.rooms.gamingcafe",
     "productName": "Rooms Gaming Cafe",
     "directories": {
-      "output": "dist": "electron-builder --win --publish=never"
+      "output": "dist"
     },
     "files": [
       "main.js",
