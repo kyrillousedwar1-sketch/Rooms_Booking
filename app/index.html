@@ -513,9 +513,7 @@
       const date = document.getElementById('cust-date').value;
       const time = document.getElementById('cust-time').value;
       const durationStr = document.getElementById('cust-duration').value;
-      const payRef = isPaid
-        ? (document.getElementById('cust-payref').value || "لم يتم إدخال رقم العملية")
-        : "لم يتم دفع العربون بعد";
+      const payRef = document.getElementById('cust-payref').value || "لم يتم إدخال رقم العملية";
 
       const hours = parseInt(durationStr) || 1;
       const totalPrice = roomObj.price * hours;
@@ -581,13 +579,10 @@
       document.getElementById('t-datetime').textContent = `${date} | ${time}`;
       document.getElementById('t-duration').textContent = durationStr;
 
-      if (isPaid) {
-        document.getElementById('t-price').textContent = `${totalPrice} ج.م`;
-        document.getElementById('t-payref').textContent = `تم الدفع ✅ - ${payRef}`;
-      } else {
-        document.getElementById('t-price').textContent = 'سيتم تحديده عند الدفع';
-        document.getElementById('t-payref').textContent = 'لم يتم دفع العربون بعد ⏳';
-      }
+      document.getElementById('t-price').textContent = `${totalPrice} ج.م`;
+      document.getElementById('t-payref').textContent = isPaid
+        ? `تم الدفع ✅ - ${payRef}`
+        : `لم يتم دفع العربون بعد ⏳ - ${payRef}`;
 
       const shotWrap = document.getElementById('t-payshot-wrap');
       if (isPaid && screenshotUrl) {
@@ -610,34 +605,26 @@
       document.getElementById('booking-form').classList.remove('hidden');
     }
 
-    // إرسال كافة تفاصيل الحجز عبر الواتساب
+    // إرسال كافة تفاصيل الحجز عبر الواتساب (كل البيانات تتبعت دايماً، مدفوع أو لأ)
     function sendTicketWhatsApp() {
       const d = currentTicketData;
 
-      let msg = `🎟️ *تأكيد حجز تذكرة - Rooms GAMING CAFE*%0A` +
-        `====================================%0A` +
-        `🔖 *رقم التذكرة:* ${d.ticketNum}%0A` +
-        `👤 *اسم العميل:* ${d.name}%0A` +
+      let msg = `🎟️ *طلب حجز جديد - ROOM CAFE*%0A` +
+        `----------------------------------%0A` +
+        `👤 *الاسم بالكامل:* ${d.name}%0A` +
         `📞 *رقم الهاتف:* ${d.phone}%0A` +
-        `🚪 *اسم الغرفة:* ${d.roomName} (${d.roomCapacity})%0A` +
+        `🚪 *رقم واسم الغرفة:* ${d.roomName} (${d.roomCapacity})%0A` +
         `📅 *تاريخ الحجز:* ${d.date}%0A` +
-        `⏰ *وقت/ميعاد الحجز:* ${d.time}%0A` +
-        `⏳ *مدة الحجز:* ${d.durationStr}%0A`;
+        `⏰ *ميعاد/وقت الحجز:* ${d.time}%0A` +
+        `⏳ *مدة الحجز:* ${d.durationStr}%0A` +
+        `💰 *السعر التقديري:* ${d.totalPrice} ج.م%0A` +
+        `💳 *إشعار/رقم عملية العربون:* ${d.payRef}%0A`;
 
-      // لا يتم إرسال أي قيمة للمبلغ إلا لو العميل دفع العربون فعلاً
-      if (d.isPaid) {
-        msg += `💵 *سعر الساعة:* ${d.roomHourlyRate} ج.م%0A`;
-        msg += `💰 *إجمالي المبلغ التقديري:* ${d.totalPrice} ج.م%0A`;
-        msg += `💳 *تفاصيل/إشعار العربون:* ${d.payRef}%0A`;
-        if (d.screenshotUrl) {
-          msg += `🧾 *صورة إثبات الدفع:* ${d.screenshotUrl}%0A`;
-        }
-      } else {
-        msg += `⚠️ *حالة العربون:* لم يتم دفع العربون بعد%0A`;
+      if (d.isPaid && d.screenshotUrl) {
+        msg += `🧾 *صورة إثبات الدفع:* ${d.screenshotUrl}%0A`;
       }
 
-      msg += `====================================%0A` +
-        `برجاء اعتماد الحجز وتسجيله على السيستم.`;
+      msg += `🔖 *رقم التذكرة:* ${d.ticketNum}`;
 
       window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
     }
